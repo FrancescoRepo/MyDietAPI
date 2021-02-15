@@ -16,5 +16,10 @@ namespace MyDiet_API.Shared.Dtos
         public string Description { get; set; }
 
         public ProductCategoryDto ProductCategory { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, Name: {Name}, Description: {Description}, ProductCategory: {ProductCategory.Description}";
+        }
     }
 }

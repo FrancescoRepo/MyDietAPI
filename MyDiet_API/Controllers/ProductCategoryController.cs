@@ -86,7 +86,7 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred in [POST] /productcategories endpoint {}");
+                _logger.LogError(ex, "Error occurred in [POST] /productcategories endpoint");
                 result = StatusCode(500, new
                 {
                     Message = "Internal Server Error"
@@ -111,7 +111,7 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred in [PUT] /productcategories endpoint with id {}", id);
+                _logger.LogError(ex, "Error occurred in [PUT] /productcategories endpoint");
                 result = StatusCode(500, new
                 {
                     Message = "Internal Server Error"
@@ -134,7 +134,7 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred in [DELETE] /productcategories endpoint with id {}", id);
+                _logger.LogError(ex, "Error occurred in [DELETE] /productcategories");
                 result = StatusCode(500, new
                 {
                     Message = "Internal Server Error"
