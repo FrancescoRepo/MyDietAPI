@@ -9,5 +9,10 @@ namespace MyDiet_API.Shared.Dtos
         [Required]
         [MinLength(5)]
         public string Description { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, Description: {Description}";
+        }
     }
 }
