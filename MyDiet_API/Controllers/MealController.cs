@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MyDiet_API.Services.IService;
 using MyDiet_API.Shared.Dtos;
 using System;
@@ -13,26 +14,33 @@ namespace MyDiet_API.Controllers
     public class MealController : Controller
     {
         private readonly IMealService _mealService;
-        public MealController(IMealService mealService)
+        private readonly ILogger<MealController> _logger;
+
+        public MealController(IMealService mealService, ILogger<MealController> logger)
         {
             _mealService = mealService;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            _logger.LogInformation("Entered in /meals endpoint");
             IActionResult result;
             try
             {
+                _logger.LogInformation("Retrieving all meals");
                 var meals = await _mealService.GetAll();
+                _logger.LogDebug("Meals: {}", meals);
+
                 result = Ok(meals);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in /meals endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 
@@ -43,19 +51,23 @@ namespace MyDiet_API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(int id)
         {
+            _logger.LogInformation("Entered in /meals with id {}", id);
             IActionResult result;
             try
             {
+                _logger.LogInformation("Retrieving meal");
                 var meal = await _mealService.Get(id);
+                _logger.LogDebug("Meal: {}", meal);
+                
                 if (meal != null) result = Ok(meal);
                 else result = NotFound();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in /meals endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 
@@ -65,19 +77,22 @@ namespace MyDiet_API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MealDto mealDto)
         {
+            _logger.LogInformation("Entered in [POST] /meals endpoint with mealDto {}", mealDto);
             IActionResult result;
             try
             {
                 var newMeal = await _mealService.Create(mealDto);
+                _logger.LogDebug("New meal: {}", newMeal);
+
                 if (newMeal != null) result = Created("", newMeal);
                 else result = BadRequest();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in /meals endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error",
                 });
             }
             
@@ -88,6 +103,7 @@ namespace MyDiet_API.Controllers
         [Route("{mealId}/diets/{dietId}")]
         public async Task<IActionResult> AddMealtoDiet(int mealId, int dietId)
         {
+            _logger.LogInformation("Entered in [POST] AddMealToDiet endpoint with mealId {}, dietId {}", mealId, dietId);
             IActionResult result;
             try
             {
@@ -96,10 +112,10 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in AddMealToDiet endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 
@@ -110,6 +126,7 @@ namespace MyDiet_API.Controllers
         [Route("{mealId}/diets/{dietId}")]
         public async Task<IActionResult> RemoveMealFromDiet(int mealId, int dietId)
         {
+            _logger.LogInformation("Entered in [POST] RemoveMealFromDiet endpoint with mealId {}, dietId {}", mealId, dietId);
             IActionResult result;
             try
             {
@@ -118,10 +135,10 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in RemoveMealFromDiet endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 
@@ -132,6 +149,7 @@ namespace MyDiet_API.Controllers
         [Route("{mealId}/products/{productId}")]
         public async Task<IActionResult> AddProductToMeal(int mealId, int productId)
         {
+            _logger.LogInformation("Entered in [POST] AddProductToMeal endpoint with mealId {}, productId {}", mealId, productId);
             IActionResult result;
             try
             {
@@ -140,10 +158,10 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in AddProductToMeal endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 
@@ -154,6 +172,7 @@ namespace MyDiet_API.Controllers
         [Route("{mealId}/products/{productId}")]
         public async Task<IActionResult> RemoveProductFromMeal(int mealId, int productId)
         {
+            _logger.LogInformation("Entered in [POST] RemoveProductFromMeal endpoint with mealId {}, productId {}", mealId, productId);
             IActionResult result;
             try
             {
@@ -162,33 +181,36 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in RemoveProductFromMeal endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 
             return result;
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] MealDto mealDto)
         {
+            _logger.LogInformation("Entered in [PUT] /meals endpoint with id {}, mealDto {}", id, mealDto);
             IActionResult result;
             try
             {
                 var updatedMeal = await _mealService.Update(id, mealDto);
+                _logger.LogDebug("Updated meal: {}", updatedMeal);
+
                 if (updatedMeal != null) result = Ok(updatedMeal);
                 else result = BadRequest();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in [PUT] /meals endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 
@@ -199,6 +221,7 @@ namespace MyDiet_API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            _logger.LogInformation("Entered in [DELETE] /meals endpoint with id {}", id);
             IActionResult result;
             try
             {
@@ -207,10 +230,10 @@ namespace MyDiet_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred in [DELETE] /meals endpoint");
                 result = StatusCode(500, new
                 {
-                    Message = "Something went wrong",
-                    Exception = ex.Message
+                    Message = "Internal Server Error"
                 });
             }
 

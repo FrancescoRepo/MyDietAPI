@@ -34,5 +34,18 @@ namespace MyDiet_API.Shared.Dtos
 
         [JsonIgnore]
         public int? DietId { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}," +
+                $"FiscalCode: {FiscalCode}," +
+                $"Name: {Name}," +
+                $"Surname: {Surname}," +
+                $"Email: {Email}," +
+                $"Age: {Age}," +
+                $"Genre: {Gender}," +
+                $"Phone: {Phone}," +
+                $"Weight: {Weight}";
+        }
     }
 }

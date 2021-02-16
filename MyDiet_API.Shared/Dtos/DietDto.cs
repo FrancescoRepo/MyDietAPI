@@ -19,5 +19,13 @@ namespace MyDiet_API.Shared.Dtos
         public PatientDto PatientDto { get; set; }
 
         public IList<DietMeal> DietMeal { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}," +
+                $"Name: {Name}," +
+                $"Description: {Description}," +
+                $"Patient: {PatientDto}";
+        }
     }
 }
