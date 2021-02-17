@@ -25,22 +25,11 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /diets endpoint");
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving all diets");
-                var diets = await _dietService.GetAll();
-                _logger.LogDebug("Diets: {}", diets);
+            _logger.LogInformation("Retrieving all diets");
+            var diets = await _dietService.GetAll();
+            _logger.LogDebug("Diets: {}", diets);
 
-                result = Ok(diets);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /diets endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            result = Ok(diets);
 
             return result;
         }
@@ -51,24 +40,12 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /meals endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving diet");
-                var diet = await _dietService.Get(id);
-                _logger.LogDebug("Diet: {}", diet);
+            _logger.LogInformation("Retrieving diet");
+            var diet = await _dietService.Get(id);
+            _logger.LogDebug("Diet: {}", diet);
 
-                if (diet != null) result = Ok(diet);
-                else result = NotFound();
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /diets endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (diet != null) result = Ok(diet);
+            else result = NotFound();
 
             return result;
         }
@@ -79,23 +56,12 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in GetAllDietMeals endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving diet {} with all associated meals", id);
-                var dietDto = await _dietService.GetAllDietMeals(id);
-                _logger.LogDebug("Diet: {}", dietDto);
+            _logger.LogInformation("Retrieving diet {} with all associated meals", id);
+            var dietDto = await _dietService.GetAllDietMeals(id);
+            _logger.LogDebug("Diet: {}", dietDto);
 
-                if (dietDto != null) result = Ok(dietDto);
-                else result = NotFound();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /diets endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (dietDto != null) result = Ok(dietDto);
+            else result = NotFound();
 
             return result;
         }
@@ -105,20 +71,9 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] /diets endpoint with dietDto {}", dietDto);
             IActionResult result;
-            try
-            {
-                var newDiet = await _dietService.Create(dietDto);
-                if (newDiet != null) result = Created("", newDiet);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [POST] /diets endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            var newDiet = await _dietService.Create(dietDto);
+            if (newDiet != null) result = Created("", newDiet);
+            else result = BadRequest();
 
             return result;
         }
@@ -129,22 +84,11 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [PUT] /diets endpoint with id {}, dietDto {}", id, dietDto);
             IActionResult result;
-            try
-            {
-                var updatedDiet = await _dietService.Update(id, dietDto);
-                _logger.LogDebug("Updated diet: {}", updatedDiet);
+            var updatedDiet = await _dietService.Update(id, dietDto);
+            _logger.LogDebug("Updated diet: {}", updatedDiet);
 
-                if (updatedDiet != null) result = Ok(updatedDiet);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [PUT] /diets endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (updatedDiet != null) result = Ok(updatedDiet);
+            else result = BadRequest();
 
             return result;
         }
@@ -155,19 +99,8 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [DELETE] /diets endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                await _dietService.Delete(id);
-                result = NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [DELETE] /diets endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            await _dietService.Delete(id);
+            result = NoContent();
 
             return result;
         }

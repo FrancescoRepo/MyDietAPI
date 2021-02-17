@@ -27,22 +27,11 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /meals endpoint");
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving all meals");
-                var meals = await _mealService.GetAll();
-                _logger.LogDebug("Meals: {}", meals);
+            _logger.LogInformation("Retrieving all meals");
+            var meals = await _mealService.GetAll();
+            _logger.LogDebug("Meals: {}", meals);
 
-                result = Ok(meals);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /meals endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            result = Ok(meals);
 
             return result;
         }
@@ -53,23 +42,12 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /meals with id {}", id);
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving meal");
-                var meal = await _mealService.Get(id);
-                _logger.LogDebug("Meal: {}", meal);
-                
-                if (meal != null) result = Ok(meal);
-                else result = NotFound();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /meals endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            _logger.LogInformation("Retrieving meal");
+            var meal = await _mealService.Get(id);
+            _logger.LogDebug("Meal: {}", meal);
+
+            if (meal != null) result = Ok(meal);
+            else result = NotFound();
 
             return result;
         }
@@ -79,23 +57,12 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] /meals endpoint with mealDto {}", mealDto);
             IActionResult result;
-            try
-            {
-                var newMeal = await _mealService.Create(mealDto);
-                _logger.LogDebug("New meal: {}", newMeal);
+            var newMeal = await _mealService.Create(mealDto);
+            _logger.LogDebug("New meal: {}", newMeal);
 
-                if (newMeal != null) result = Created("", newMeal);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /meals endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error",
-                });
-            }
-            
+            if (newMeal != null) result = Created("", newMeal);
+            else result = BadRequest();
+
             return result;
         }
 
@@ -105,19 +72,8 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] AddMealToDiet endpoint with mealId {}, dietId {}", mealId, dietId);
             IActionResult result;
-            try
-            {
-                bool added = await _mealService.AddMealToDiet(dietId, mealId);
-                if (added) result = Ok(); else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in AddMealToDiet endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            bool added = await _mealService.AddMealToDiet(dietId, mealId);
+            if (added) result = Ok(); else result = BadRequest();
 
             return result;
         }
@@ -128,19 +84,8 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] RemoveMealFromDiet endpoint with mealId {}, dietId {}", mealId, dietId);
             IActionResult result;
-            try
-            {
-                await _mealService.RemoveMealFromDiet(dietId, mealId);
-                result = NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in RemoveMealFromDiet endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            await _mealService.RemoveMealFromDiet(dietId, mealId);
+            result = NoContent();
 
             return result;
         }
@@ -151,19 +96,8 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] AddProductToMeal endpoint with mealId {}, productId {}", mealId, productId);
             IActionResult result;
-            try
-            {
-                bool added = await _mealService.AddProductToMeal(mealId, productId);
-                if (added) result = Ok(); else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in AddProductToMeal endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            bool added = await _mealService.AddProductToMeal(mealId, productId);
+            if (added) result = Ok(); else result = BadRequest();
 
             return result;
         }
@@ -174,19 +108,8 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] RemoveProductFromMeal endpoint with mealId {}, productId {}", mealId, productId);
             IActionResult result;
-            try
-            {
-                await _mealService.RemoveProductFromMeal(mealId, productId);
-                result = NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in RemoveProductFromMeal endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            await _mealService.RemoveProductFromMeal(mealId, productId);
+            result = NoContent();
 
             return result;
         }
@@ -197,22 +120,11 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [PUT] /meals endpoint with id {}, mealDto {}", id, mealDto);
             IActionResult result;
-            try
-            {
-                var updatedMeal = await _mealService.Update(id, mealDto);
-                _logger.LogDebug("Updated meal: {}", updatedMeal);
+            var updatedMeal = await _mealService.Update(id, mealDto);
+            _logger.LogDebug("Updated meal: {}", updatedMeal);
 
-                if (updatedMeal != null) result = Ok(updatedMeal);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [PUT] /meals endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (updatedMeal != null) result = Ok(updatedMeal);
+            else result = BadRequest();
 
             return result;
         }
@@ -223,19 +135,8 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [DELETE] /meals endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                await _mealService.Delete(id);
-                result = NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [DELETE] /meals endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            await _mealService.Delete(id);
+            result = NoContent();
 
             return result;
         }

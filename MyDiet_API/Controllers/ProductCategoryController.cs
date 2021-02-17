@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 using MyDiet_API.Services.IService;
 using MyDiet_API.Shared.Dtos;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyDiet_API.Controllers
@@ -26,20 +24,9 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /productcategories endpoint");
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving all productCategories");
-                var productCategories = await _productCategoryService.GetAll();
-                result = Ok(productCategories);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /productcategories endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            _logger.LogInformation("Retrieving all productCategories");
+            var productCategories = await _productCategoryService.GetAll();
+            result = Ok(productCategories);
 
             return result;
         }
@@ -50,23 +37,12 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /productcategories endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving product category");
-                var productCategory = await _productCategoryService.Get(id);
-                _logger.LogDebug("productCategory: {}", productCategory);
+            _logger.LogInformation("Retrieving product category");
+            var productCategory = await _productCategoryService.Get(id);
+            _logger.LogDebug("productCategory: {}", productCategory);
 
-                if (productCategory != null) result = Ok(productCategory);
-                else result = NotFound();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /productcategories endpoint with id {}", id);
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (productCategory != null) result = Ok(productCategory);
+            else result = NotFound();
 
             return result;
         }
@@ -76,22 +52,11 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] /productcategories endpoint with {}", productCategoryDto);
             IActionResult result;
-            try
-            {
-                var newProductCategory = await _productCategoryService.Create(productCategoryDto);
-                _logger.LogDebug("New ProductCategory: {}", newProductCategory);
+            var newProductCategory = await _productCategoryService.Create(productCategoryDto);
+            _logger.LogDebug("New ProductCategory: {}", newProductCategory);
 
-                if (newProductCategory != null) result = Created("", newProductCategory);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [POST] /productcategories endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (newProductCategory != null) result = Created("", newProductCategory);
+            else result = BadRequest();
 
             return result;
         }
@@ -102,21 +67,10 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [PUT] /productcategories endpoint with id {}, productCategoryDto {}", id, productCategoryDto);
             IActionResult result;
-            try
-            {
-                var updatedProductCategory = await _productCategoryService.Update(id, productCategoryDto);
-                _logger.LogDebug("Updated ProductCategory: {}", updatedProductCategory);
-                if (updatedProductCategory != null) result = Ok(updatedProductCategory);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [PUT] /productcategories endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            var updatedProductCategory = await _productCategoryService.Update(id, productCategoryDto);
+            _logger.LogDebug("Updated ProductCategory: {}", updatedProductCategory);
+            if (updatedProductCategory != null) result = Ok(updatedProductCategory);
+            else result = BadRequest();
 
             return result;
         }
@@ -127,20 +81,9 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [DELETE] /productcategories endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                await _productCategoryService.Delete(id);
-                result = NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [DELETE] /productcategories");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
-            
+            await _productCategoryService.Delete(id);
+            result = NoContent();
+
             return result;
         }
     }

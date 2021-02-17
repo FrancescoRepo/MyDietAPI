@@ -27,21 +27,10 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /patients endpoint");
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving all patients");
-                var patients = await _patientService.GetAll();
-                _logger.LogDebug("Patient: {}", patients);
-                result = Ok(patients);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /patients endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            _logger.LogInformation("Retrieving all patients");
+            var patients = await _patientService.GetAll();
+            _logger.LogDebug("Patient: {}", patients);
+            result = Ok(patients);
 
             return result;
         }
@@ -52,23 +41,12 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in /patients endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                _logger.LogInformation("Retrieving patient");
-                var patient = await _patientService.Get(id);
-                _logger.LogDebug("Patient: {}", patient);
+            _logger.LogInformation("Retrieving patient");
+            var patient = await _patientService.Get(id);
+            _logger.LogDebug("Patient: {}", patient);
 
-                if (patient != null) result = Ok(patient);
-                else result = NotFound();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in /patients endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (patient != null) result = Ok(patient);
+            else result = NotFound();
 
             return result;
         }
@@ -78,22 +56,11 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [POST] /patients endpoint with patientDto {}", patientDto);
             IActionResult result;
-            try
-            {
-                var newPatient = await _patientService.Create(patientDto);
-                _logger.LogDebug("New Patient: {}", newPatient);
+            var newPatient = await _patientService.Create(patientDto);
+            _logger.LogDebug("New Patient: {}", newPatient);
 
-                if (newPatient != null) result = Created("", newPatient);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [POST] /patients endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (newPatient != null) result = Created("", newPatient);
+            else result = BadRequest();
 
             return result;
         }
@@ -104,22 +71,11 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogError("Entered in [PUT] /patients endpoint with id {}, patientDto {}", id, patientDto);
             IActionResult result;
-            try
-            {
-                var updatedPatient = await _patientService.Update(id, patientDto);
-                _logger.LogDebug("Updated patient: {}", updatedPatient);
+            var updatedPatient = await _patientService.Update(id, patientDto);
+            _logger.LogDebug("Updated patient: {}", updatedPatient);
 
-                if (updatedPatient != null) result = Ok(updatedPatient);
-                else result = BadRequest();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [PUT] /patients endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            if (updatedPatient != null) result = Ok(updatedPatient);
+            else result = BadRequest();
 
             return result;
         }
@@ -130,19 +86,8 @@ namespace MyDiet_API.Controllers
         {
             _logger.LogInformation("Entered in [DELETE] /patients endpoint with id {}", id);
             IActionResult result;
-            try
-            {
-                await _patientService.Delete(id);
-                result = NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred in [DELETE] /patients endpoint");
-                result = StatusCode(500, new
-                {
-                    Message = "Internal Server Error"
-                });
-            }
+            await _patientService.Delete(id);
+            result = NoContent();
 
             return result;
         }
