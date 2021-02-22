@@ -1,4 +1,4 @@
-# MyDiet
+# MyDietAPI
 Web API of MyDiet made with Asp.NET Core 3.1
 This project includes API, JWT Authentication, Swagger UI, Logging with NLog, AutoMapper
 
