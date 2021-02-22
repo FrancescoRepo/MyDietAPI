@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using System;
+using MyDiet_API.Utilities;
 using System.Net;
 
 namespace MyDiet_API.Filters
@@ -9,7 +9,6 @@ namespace MyDiet_API.Filters
     public class ExceptionHandlingFilter : ExceptionFilterAttribute
     {
         private readonly ILogger<ExceptionHandlingFilter> _logger;
-        private const string ERROR_MESSAGE = "Internal Server Error";
 
         public ExceptionHandlingFilter(ILogger<ExceptionHandlingFilter> logger)
         {
@@ -19,7 +18,7 @@ namespace MyDiet_API.Filters
         public override void OnException(ExceptionContext context)
         {
             _logger.LogError(context.Exception, $"Error occurred in {context.HttpContext.Request.Path}\n");
-            SetExceptionResult(context, context.Exception, HttpStatusCode.InternalServerError);
+            SetExceptionResult(context, HttpStatusCode.InternalServerError);
 
             context.ExceptionHandled = true;
             string path = context.HttpContext.Request.Path;
@@ -28,13 +27,12 @@ namespace MyDiet_API.Filters
 
         private static void SetExceptionResult(
             ExceptionContext context,
-            Exception exception,
             HttpStatusCode code)
         {
             context.Result = new JsonResult(new
             {
                 StatusCode = code,
-                Message = ERROR_MESSAGE
+                Message = Constants.INTERNAL_SERVER_ERROR
             })
             { 
                 StatusCode = (int)code

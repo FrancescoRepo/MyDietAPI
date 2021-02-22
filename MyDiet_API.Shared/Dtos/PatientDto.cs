@@ -37,7 +37,7 @@ namespace MyDiet_API.Shared.Dtos
 
         public override string ToString()
         {
-            return $"Id: {Id}," +
+            return $"[Id: {Id}," +
                 $"FiscalCode: {FiscalCode}," +
                 $"Name: {Name}," +
                 $"Surname: {Surname}," +
@@ -45,7 +45,7 @@ namespace MyDiet_API.Shared.Dtos
                 $"Age: {Age}," +
                 $"Genre: {Gender}," +
                 $"Phone: {Phone}," +
-                $"Weight: {Weight}";
+                $"Weight: {Weight}]";
         }
     }
 }

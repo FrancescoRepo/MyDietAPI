@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyDiet_API.Extensions;
+using MyDiet_API.Middlewares;
 
 namespace MyDiet_API
 {
@@ -20,6 +21,7 @@ namespace MyDiet_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithOptions();
+            services.RegisterAuthentication(Configuration);
             services.AddApplicationContext(Configuration);
             services.RegisterServices();
             services.RegisterAutoMapper();
@@ -44,6 +46,9 @@ namespace MyDiet_API
 
             app.UseRouting();
 
+            app.UseAuthMiddleware();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyDiet_API.Business;
 using MyDiet_API.Business.IRepository;
@@ -9,6 +12,7 @@ using MyDiet_API.Filters;
 using MyDiet_API.Services;
 using MyDiet_API.Services.IService;
 using System;
+using System.Text;
 
 namespace MyDiet_API.Extensions
 {
@@ -28,6 +32,34 @@ namespace MyDiet_API.Extensions
             });
         }
 
+        public static void RegisterAuthentication(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequiredLength = 4;
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => 
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["AuthSettings:Audience"],
+                    ValidIssuer = Configuration["AuthSettings:Issuer"],
+                    RequireExpirationTime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthSettings:key"])),
+                    ValidateIssuerSigningKey = true
+                };
+            });
+        }
+
         public static void AddApplicationContext(this IServiceCollection services, IConfiguration Configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -35,6 +67,8 @@ namespace MyDiet_API.Extensions
 
         public static void RegisterServices(this IServiceCollection services)
         {
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAuthTokenService, AuthTokenService>();
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, PatientsService>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
@@ -51,14 +85,15 @@ namespace MyDiet_API.Extensions
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
+
         public static void AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyDiet API", Version = "1" });
-                //c.OperationFilter<AuthorizationOperationFilter>();
+                c.OperationFilter<AuthorizationOperationFilter>();
 
-                /*c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
@@ -94,8 +129,7 @@ namespace MyDiet_API.Extensions
                             },
                             new string[] {}
                     }
-                });*/
-
+                });
             });
         }
     }

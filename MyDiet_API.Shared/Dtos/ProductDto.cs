@@ -19,7 +19,7 @@ namespace MyDiet_API.Shared.Dtos
 
         public override string ToString()
         {
-            return $"Id: {Id}, Name: {Name}, Description: {Description}, ProductCategory: {ProductCategory.Description}";
+            return $"[Id: {Id}, Name: {Name}, Description: {Description}, ProductCategory: {ProductCategory.Description}]";
         }
     }
 }
