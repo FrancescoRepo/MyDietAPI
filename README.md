@@ -22,8 +22,9 @@ You will need at least:
   
   with your path for logging
 - Go to Tools -> Manage Nuget Packages -> Console Nuget Packages
-- Once the PowerShell Console will be open, paste this line:
+- Once the PowerShell Console will be open, paste these lines:
 
+  > Add-Migration init
   > Update-Database
   
   This will ensure the creation of the database with all the migrations applied
@@ -31,8 +32,7 @@ You will need at least:
 #### Run the project and try it out.
 
 ## Future improvements
-- Add Authentication in order to protect all routes
 - Increase validation and business logic
 
 ## License
-MyDiet is available under the MIT license. See the LICENSE file for more info.
+MyDietAPI is available under the MIT license. See the LICENSE file for more info.
