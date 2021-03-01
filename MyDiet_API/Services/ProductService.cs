@@ -15,28 +15,28 @@ namespace MyDiet_API.Services
             _productRepository = productRepository;
         }
 
-        public async Task<IList<ProductDto>> GetAll()
+        public async Task<IList<ProductDto>> GetAllAsync()
         {
-            return await _productRepository.GetAll();
+            return await _productRepository.GetAllAsync();
         }
-        public async Task<ProductDto> Get(int id)
+        public async Task<ProductDto> GetAsync(int id)
         {
-            return await _productRepository.Get(id);
-        }
-
-        public async Task<ProductDto> Create(ProductDto entityDto)
-        {
-            return await _productRepository.Create(entityDto);
+            return await _productRepository.GetAsync(id);
         }
 
-        public async Task<ProductDto> Update(int id, ProductDto entityDto)
+        public async Task<ProductDto> CreateAsync(ProductDto entityDto)
         {
-            return await _productRepository.Update(id, entityDto);
+            return await _productRepository.CreateAsync(entityDto);
         }
 
-        public async Task Delete(int id)
+        public async Task<ProductDto> UpdateAsync(int id, ProductDto entityDto)
         {
-            await _productRepository.Delete(id);
+            return await _productRepository.UpdateAsync(id, entityDto);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            return await _productRepository.DeleteAsync(id);
         }
 
         public bool CheckIfUnique(string parameter, ProductDto entityDto)

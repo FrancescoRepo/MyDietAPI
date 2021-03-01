@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyDiet_API", "MyDiet_API\My
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyDiet_API.Shared", "MyDiet_API.Shared\MyDiet_API.Shared.csproj", "{AE47D382-38A5-4D10-87B7-A7E2E4AB8300}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDiet_API.UnitTests", "MyDiet_API.UnitTests\MyDiet_API.UnitTests.csproj", "{65982965-F67A-4757-B095-033A83643DE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AE47D382-38A5-4D10-87B7-A7E2E4AB8300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE47D382-38A5-4D10-87B7-A7E2E4AB8300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE47D382-38A5-4D10-87B7-A7E2E4AB8300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65982965-F67A-4757-B095-033A83643DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65982965-F67A-4757-B095-033A83643DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65982965-F67A-4757-B095-033A83643DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65982965-F67A-4757-B095-033A83643DE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

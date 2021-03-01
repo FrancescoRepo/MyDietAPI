@@ -5,6 +5,6 @@ namespace MyDiet_API.Business.IRepository
 {
     public interface IDietRepository : IRepository<DietDto>
     {
-        public Task<DietDto> GetAllDietMeals(int id);
+        public Task<DietDto> GetAllDietMealsAsync(int id);
     }
 }

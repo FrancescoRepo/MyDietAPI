@@ -5,9 +5,9 @@ namespace MyDiet_API.Business.IRepository
 {
     public interface IMealRepository : IRepository<MealDto>
     {
-        public Task<bool> AddMealToDiet(int dietId, int mealId);
-        public Task<bool> AddProductToMeal(int mealId, int productId);
-        public Task RemoveMealFromDiet(int dietId, int mealId);
-        public Task RemoveProductFromMeal(int mealId, int productId);
+        public Task<bool> AddMealToDietAsync(int dietId, int mealId);
+        public Task<bool> AddProductToMealAsync(int mealId, int productId);
+        public Task<bool> RemoveMealFromDietAsync(int dietId, int mealId);
+        public Task<bool> RemoveProductFromMealAsync(int mealId, int productId);
     }
 }

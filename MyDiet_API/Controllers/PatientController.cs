@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyDiet_API.Services.IService;
 using MyDiet_API.Shared.Dtos;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
 namespace MyDiet_API.Controllers
@@ -23,13 +24,18 @@ namespace MyDiet_API.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get all Patients", Description = "Get all Patients")]
+        [SwaggerResponse(200, "OK")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation("Entered in /patients endpoint");
             IActionResult result;
+
             _logger.LogInformation("Retrieving all patients");
-            var patients = await _patientService.GetAll();
-            _logger.LogDebug("Patient: {}", patients);
+            var patients = await _patientService.GetAllAsync();
+            _logger.LogDebug("Patients: {}", patients);
+
             result = Ok(patients);
 
             return result;
@@ -37,12 +43,17 @@ namespace MyDiet_API.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [SwaggerOperation(Summary = "Get a Patient", Description = "Get a Patient with a specific Id")]
+        [SwaggerResponse(200, "OK")]
+        [SwaggerResponse(404, "Not Found")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Get(int id)
         {
             _logger.LogInformation("Entered in /patients endpoint with id {}", id);
             IActionResult result;
+
             _logger.LogInformation("Retrieving patient");
-            var patient = await _patientService.Get(id);
+            var patient = await _patientService.GetAsync(id);
             _logger.LogDebug("Patient: {}", patient);
 
             if (patient != null) result = Ok(patient);
@@ -52,11 +63,16 @@ namespace MyDiet_API.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Create a Patient", Description = "Create a new Patient")]
+        [SwaggerResponse(201, "Created")]
+        [SwaggerResponse(400, "Bad Request")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Create([FromBody] PatientDto patientDto)
         {
             _logger.LogInformation("Entered in [POST] /patients endpoint with patientDto {}", patientDto);
             IActionResult result;
-            var newPatient = await _patientService.Create(patientDto);
+
+            var newPatient = await _patientService.CreateAsync(patientDto);
             _logger.LogDebug("New Patient: {}", newPatient);
 
             if (newPatient != null) result = Created("", newPatient);
@@ -67,11 +83,15 @@ namespace MyDiet_API.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [SwaggerOperation(Summary = "Update a Patient", Description = "Update a Patient with a specific Id")]
+        [SwaggerResponse(200, "OK")]
+        [SwaggerResponse(400, "Bad Request")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Update(int id, [FromBody] PatientDto patientDto)
         {
             _logger.LogError("Entered in [PUT] /patients endpoint with id {}, patientDto {}", id, patientDto);
             IActionResult result;
-            var updatedPatient = await _patientService.Update(id, patientDto);
+            var updatedPatient = await _patientService.UpdateAsync(id, patientDto);
             _logger.LogDebug("Updated patient: {}", updatedPatient);
 
             if (updatedPatient != null) result = Ok(updatedPatient);
@@ -82,12 +102,17 @@ namespace MyDiet_API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [SwaggerOperation(Summary = "Delete a Patient", Description = "Delete a Patient with a specific Id")]
+        [SwaggerResponse(200, "OK")]
+        [SwaggerResponse(400, "Bad Request")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Delete(int id)
         {
             _logger.LogInformation("Entered in [DELETE] /patients endpoint with id {}", id);
             IActionResult result;
-            await _patientService.Delete(id);
-            result = NoContent();
+
+            if (await _patientService.DeleteAsync(id)) result = NoContent();
+            else result = BadRequest();
 
             return result;
         }

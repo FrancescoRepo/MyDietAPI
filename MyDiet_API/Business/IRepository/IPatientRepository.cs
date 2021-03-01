@@ -5,6 +5,6 @@ namespace MyDiet_API.Business.IRepository
 {
     public interface IPatientRepository : IRepository<PatientDto>
     {
-        public Task DisassociateDiet(int id);
+        public Task<bool> DisassociateDietAsync(int id);
     }
 }

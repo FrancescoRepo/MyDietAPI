@@ -15,28 +15,28 @@ namespace MyDiet_API.Services
             _productCategoryRepository = productCategoryRepository;
         }
 
-        public async Task<IList<ProductCategoryDto>> GetAll()
+        public async Task<IList<ProductCategoryDto>> GetAllAsync()
         {
-            return await _productCategoryRepository.GetAll();
+            return await _productCategoryRepository.GetAllAsync();
         }
-        public async Task<ProductCategoryDto> Get(int id)
+        public async Task<ProductCategoryDto> GetAsync(int id)
         {
-            return await _productCategoryRepository.Get(id);
-        }
-
-        public async Task<ProductCategoryDto> Create(ProductCategoryDto productCategoryDto)
-        {
-            return await _productCategoryRepository.Create(productCategoryDto);
+            return await _productCategoryRepository.GetAsync(id);
         }
 
-        public async Task<ProductCategoryDto> Update(int id, ProductCategoryDto productCategoryDto)
+        public async Task<ProductCategoryDto> CreateAsync(ProductCategoryDto productCategoryDto)
         {
-            return await _productCategoryRepository.Update(id, productCategoryDto);
+            return await _productCategoryRepository.CreateAsync(productCategoryDto);
         }
 
-        public async Task Delete(int id)
+        public async Task<ProductCategoryDto> UpdateAsync(int id, ProductCategoryDto productCategoryDto)
         {
-            await _productCategoryRepository.Delete(id);
+            return await _productCategoryRepository.UpdateAsync(id, productCategoryDto);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            return await _productCategoryRepository.DeleteAsync(id);
         }
 
         public bool CheckIfUnique(string parameter, ProductCategoryDto entityDto)

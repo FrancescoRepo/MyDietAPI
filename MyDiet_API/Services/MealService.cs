@@ -14,38 +14,38 @@ namespace MyDiet_API.Services
             _mealRepository = mealRepository;
         }
 
-        public async Task<IList<MealDto>> GetAll()
+        public async Task<IList<MealDto>> GetAllAsync()
         {
-            return await _mealRepository.GetAll();
+            return await _mealRepository.GetAllAsync();
         }
 
-        public async Task<MealDto> Get(int id)
+        public async Task<MealDto> GetAsync(int id)
         {
-            return await _mealRepository.Get(id);
+            return await _mealRepository.GetAsync(id);
         }
-        public async Task<MealDto> Create(MealDto entityDto)
+        public async Task<MealDto> CreateAsync(MealDto entityDto)
         {
-            return await _mealRepository.Create(entityDto);
-        }
-
-        public async Task<MealDto> Update(int id, MealDto entityDto)
-        {
-            return await _mealRepository.Update(id, entityDto);
+            return await _mealRepository.CreateAsync(entityDto);
         }
 
-        public async Task Delete(int id)
+        public async Task<MealDto> UpdateAsync(int id, MealDto entityDto)
         {
-            await _mealRepository.Delete(id);
+            return await _mealRepository.UpdateAsync(id, entityDto);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            return await _mealRepository.DeleteAsync(id);
         }
 
         public async Task<bool> AddMealToDiet(int dietId, int mealId)
         {
-            return await _mealRepository.AddMealToDiet(dietId, mealId);
+            return await _mealRepository.AddMealToDietAsync(dietId, mealId);
         }
 
-        public async Task RemoveMealFromDiet(int dietId, int mealId)
+        public async Task<bool> RemoveMealFromDiet(int dietId, int mealId)
         {
-            await _mealRepository.RemoveMealFromDiet(dietId, mealId);
+            return await _mealRepository.RemoveMealFromDietAsync(dietId, mealId);
         }
 
         public bool CheckIfUnique(string parameter, MealDto entityDto)
@@ -55,12 +55,12 @@ namespace MyDiet_API.Services
 
         public async Task<bool> AddProductToMeal(int mealId, int productId)
         {
-            return await _mealRepository.AddProductToMeal(mealId, productId);
+            return await _mealRepository.AddProductToMealAsync(mealId, productId);
         }
 
-        public async Task RemoveProductFromMeal(int mealId, int productId)
+        public async Task<bool> RemoveProductFromMeal(int mealId, int productId)
         {
-            await _mealRepository.RemoveProductFromMeal(mealId, productId);
+            return await _mealRepository.RemoveProductFromMealAsync(mealId, productId);
         }
     }
 }

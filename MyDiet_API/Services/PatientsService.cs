@@ -15,29 +15,29 @@ namespace MyDiet_API.Services
             _patientRepository = patientRepository;
         }
 
-        public async Task<IList<PatientDto>> GetAll()
+        public async Task<IList<PatientDto>> GetAllAsync()
         {
-            return await _patientRepository.GetAll();
+            return await _patientRepository.GetAllAsync();
         }
 
-        public async Task<PatientDto> Get(int id)
+        public async Task<PatientDto> GetAsync(int id)
         {
-            return await _patientRepository.Get(id);
+            return await _patientRepository.GetAsync(id);
         }
 
-        public async Task<PatientDto> Create(PatientDto entityDto)
+        public async Task<PatientDto> CreateAsync(PatientDto entityDto)
         {
-            return await _patientRepository.Create(entityDto);
+            return await _patientRepository.CreateAsync(entityDto);
         }
 
-        public async Task<PatientDto> Update(int id, PatientDto entityDto)
+        public async Task<PatientDto> UpdateAsync(int id, PatientDto entityDto)
         {
-            return await _patientRepository.Update(id, entityDto);
+            return await _patientRepository.UpdateAsync(id, entityDto);
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            await _patientRepository.Delete(id);
+            return await _patientRepository.DeleteAsync(id);
         }
 
         public bool CheckIfUnique(string parameter, PatientDto entityDto)

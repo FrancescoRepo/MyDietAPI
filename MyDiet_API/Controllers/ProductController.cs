@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyDiet_API.Services.IService;
 using MyDiet_API.Shared.Dtos;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
 namespace MyDiet_API.Controllers
@@ -22,12 +23,15 @@ namespace MyDiet_API.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get Products", Description = "Get all Products")]
+        [SwaggerResponse(200, "OK")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation("Entered in /products endpoint");
             IActionResult result;
             _logger.LogInformation("Retrieving all products");
-            var products = await _productService.GetAll();
+            var products = await _productService.GetAllAsync();
             result = Ok(products);
 
             return result;
@@ -35,12 +39,16 @@ namespace MyDiet_API.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [SwaggerOperation(Summary = "Get a Product", Description = "Get a Product with a specific Id")]
+        [SwaggerResponse(200, "OK")]
+        [SwaggerResponse(404, "Not Found")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Get(int id)
         {
             _logger.LogInformation("Entered in /products endpoint with id {}", id);
             IActionResult result;
             _logger.LogInformation("Retrieving product");
-            var product = await _productService.Get(id);
+            var product = await _productService.GetAsync(id);
             _logger.LogDebug("Product: {}", product);
 
             if (product != null) result = Ok(product);
@@ -50,11 +58,15 @@ namespace MyDiet_API.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Create a Product", Description = "Create a new Product")]
+        [SwaggerResponse(201, "Created")]
+        [SwaggerResponse(400, "Bad Request")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Create([FromBody] ProductDto productDto)
         {
             _logger.LogInformation("Entered in [POST] /products endpoint with productDto {}", productDto);
             IActionResult result;
-            var newProduct = await _productService.Create(productDto);
+            var newProduct = await _productService.CreateAsync(productDto);
             _logger.LogDebug("New Product: {}", newProduct);
 
             if (newProduct != null) result = Created("", newProduct);
@@ -65,11 +77,15 @@ namespace MyDiet_API.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [SwaggerOperation(Summary = "Update a Product", Description = "Update a Product with a specific Id")]
+        [SwaggerResponse(200, "OK")]
+        [SwaggerResponse(400, "Bad Request")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Update(int id, [FromBody] ProductDto productDto)
         {
             _logger.LogInformation("Entered in [PUT] /products endpoint with id {}, productDto {}", id, productDto);
             IActionResult result;
-            var updatedProduct = await _productService.Update(id, productDto);
+            var updatedProduct = await _productService.UpdateAsync(id, productDto);
             _logger.LogDebug("Updated Product: {}", updatedProduct);
 
             if (updatedProduct != null) result = Created("", updatedProduct);
@@ -80,12 +96,17 @@ namespace MyDiet_API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [SwaggerOperation(Summary = "Delete a Product", Description = "Delete a Product with a specific Id")]
+        [SwaggerResponse(204, "No Content")]
+        [SwaggerResponse(400, "Bad Request")]
+        [SwaggerResponse(500, "Internal Server Error")]
         public async Task<IActionResult> Delete(int id)
         {
             _logger.LogInformation("Entered in [DELETE] /products endpoint with id {}", id);
             IActionResult result;
-            await _productService.Delete(id);
-            result = NoContent();
+
+            if (await _productService.DeleteAsync(id)) result = NoContent();
+            else result = BadRequest();
 
             return result;
         }

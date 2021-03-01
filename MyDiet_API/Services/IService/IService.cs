@@ -5,11 +5,11 @@ namespace MyDiet_API.Services.IService
 {
     public interface IService<T>
     {
-        public Task<IList<T>> GetAll();
-        public Task<T> Get(int id);
-        public Task<T> Create(T entityDto);
-        public Task<T> Update(int id, T entityDto);
-        public Task Delete(int id);
+        public Task<IList<T>> GetAllAsync();
+        public Task<T> GetAsync(int id);
+        public Task<T> CreateAsync(T entityDto);
+        public Task<T> UpdateAsync(int id, T entityDto);
+        public Task<bool> DeleteAsync(int id);
         public bool CheckIfUnique(string parameter, T entityDto);
     }
 }

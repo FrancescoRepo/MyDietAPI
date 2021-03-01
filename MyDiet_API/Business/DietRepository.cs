@@ -28,9 +28,9 @@ namespace MyDiet_API.Business
             _logger = logger;
         }
 
-        public async Task<IList<DietDto>> GetAll()
+        public async Task<IList<DietDto>> GetAllAsync()
         {
-            _logger.LogInformation("Entered in GetAll");
+            _logger.LogInformation("Entered in GetAllAsync");
             Stopwatch stopWatch = new Stopwatch();
 
             stopWatch.Start();
@@ -52,7 +52,7 @@ namespace MyDiet_API.Business
             return dietsDto;
         }
 
-        public async Task<DietDto> Get(int id)
+        public async Task<DietDto> GetAsync(int id)
         {
             _logger.LogInformation("Entered in Get with id {}", id);
             Stopwatch stopWatch = new Stopwatch();
@@ -60,6 +60,16 @@ namespace MyDiet_API.Business
             stopWatch.Start();
 
             Diet diet = await _ctx.Diets.Include(d => d.DietMeal).FirstOrDefaultAsync(d => d.Id == id);
+            
+            if(diet == null)
+            {
+                stopWatch.Stop();
+                _logger.LogInformation("Elapsed time in {0} ms", stopWatch.ElapsedMilliseconds);
+
+                _logger.LogError("Diet with id {} not found", id);
+
+                return null;
+            }
             
             Patient patientFromDb = await _ctx.Patients.Include(p => p.Diet).FirstOrDefaultAsync(p => p.DietId == id);
             PatientDto patientDto = _mapper.Map<Patient, PatientDto>(patientFromDb);
@@ -74,7 +84,7 @@ namespace MyDiet_API.Business
             return _mapper.Map<Diet, DietDto>(diet, dietDto);
         }
 
-        public async Task<DietDto> Create(DietDto entity)
+        public async Task<DietDto> CreateAsync(DietDto entity)
         {
             _logger.LogInformation("Entered in Create with dietDto {}", entity);
             Stopwatch stopWatch = new Stopwatch();
@@ -86,7 +96,7 @@ namespace MyDiet_API.Business
             await _ctx.SaveChangesAsync();
 
             entity.PatientDto.DietId = dietToAdd.Id;
-            await _patientRepository.Update(entity.PatientDto.Id, entity.PatientDto);
+            await _patientRepository.UpdateAsync(entity.PatientDto.Id, entity.PatientDto);
 
             stopWatch.Stop();
 
@@ -94,7 +104,7 @@ namespace MyDiet_API.Business
             return _mapper.Map<Diet, DietDto>(newDiet);
         }
 
-        public async Task<DietDto> Update(int id, DietDto entity)
+        public async Task<DietDto> UpdateAsync(int id, DietDto entity)
         {
             _logger.LogInformation("Entered in Update with id {}, dietDto {}", id, entity);
             Stopwatch stopWatch = new Stopwatch();
@@ -102,13 +112,24 @@ namespace MyDiet_API.Business
             stopWatch.Start();
 
             Diet dietFromDb = await _ctx.Diets.FindAsync(id);
+
+            if (dietFromDb == null)
+            {
+                stopWatch.Stop();
+                _logger.LogInformation("Elapsed time in {0} ms", stopWatch.ElapsedMilliseconds);
+
+                _logger.LogError("Diet with id {} not found", id);
+
+                return null;
+            }
+
             Diet dietToUpdate = _mapper.Map<DietDto, Diet>(entity);
             _ctx.Entry(dietFromDb).CurrentValues.SetValues(dietToUpdate);
             await _ctx.SaveChangesAsync();
 
-            await _patientRepository.DisassociateDiet(id);
+            await _patientRepository.DisassociateDietAsync(id);
             entity.PatientDto.DietId = dietToUpdate.Id;
-            await _patientRepository.Update(entity.PatientDto.Id, entity.PatientDto);
+            await _patientRepository.UpdateAsync(entity.PatientDto.Id, entity.PatientDto);
 
             stopWatch.Stop();
             
@@ -116,7 +137,7 @@ namespace MyDiet_API.Business
             return _mapper.Map<Diet, DietDto>(dietToUpdate);
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("Entered in Delete with id {}", id);
             Stopwatch stopWatch = new Stopwatch();
@@ -124,6 +145,17 @@ namespace MyDiet_API.Business
             stopWatch.Start();
 
             Diet dietFromDb = await _ctx.Diets.FindAsync(id);
+
+            if (dietFromDb == null)
+            {
+                stopWatch.Stop();
+                _logger.LogInformation("Elapsed time in {0} ms", stopWatch.ElapsedMilliseconds);
+
+                _logger.LogError("Diet with id {} not found", id);
+
+                return false;
+            }
+
             _ctx.Diets.Remove(dietFromDb);
 
             await _ctx.SaveChangesAsync();
@@ -131,9 +163,11 @@ namespace MyDiet_API.Business
             stopWatch.Stop();
 
             _logger.LogInformation("Elapsed time in {0} ms", stopWatch.ElapsedMilliseconds);
+
+            return true;
         }
 
-        public async Task<DietDto> GetAllDietMeals(int id)
+        public async Task<DietDto> GetAllDietMealsAsync(int id)
         {
             _logger.LogInformation("Entered in GetAllDietMeals with id {}", id);
             Stopwatch stopWatch = new Stopwatch();

@@ -12,6 +12,8 @@ using MyDiet_API.Filters;
 using MyDiet_API.Services;
 using MyDiet_API.Services.IService;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace MyDiet_API.Extensions
@@ -92,7 +94,7 @@ namespace MyDiet_API.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyDiet API", Version = "1" });
                 c.OperationFilter<AuthorizationOperationFilter>();
-
+                
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -130,6 +132,8 @@ namespace MyDiet_API.Extensions
                             new string[] {}
                     }
                 });
+
+                c.EnableAnnotations();
             });
         }
     }

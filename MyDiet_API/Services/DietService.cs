@@ -14,34 +14,34 @@ namespace MyDiet_API.Services
             _dietRepository = dietRepository;
         }
 
-        public async Task<IList<DietDto>> GetAll()
+        public async Task<IList<DietDto>> GetAllAsync()
         {
-            return await _dietRepository.GetAll();
+            return await _dietRepository.GetAllAsync();
         }
 
-        public async Task<DietDto> Get(int id)
+        public async Task<DietDto> GetAsync(int id)
         {
-            return await _dietRepository.Get(id);
+            return await _dietRepository.GetAsync(id);
         }
 
-        public async Task<DietDto> Create(DietDto entityDto)
+        public async Task<DietDto> CreateAsync(DietDto entityDto)
         {
-            return await _dietRepository.Create(entityDto);
+            return await _dietRepository.CreateAsync(entityDto);
         }
 
-        public async Task<DietDto> Update(int id, DietDto entityDto)
+        public async Task<DietDto> UpdateAsync(int id, DietDto entityDto)
         {
-            return await _dietRepository.Update(id, entityDto);
+            return await _dietRepository.UpdateAsync(id, entityDto);
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            await _dietRepository.Delete(id);
+            return await _dietRepository.DeleteAsync(id);
         }
 
         public async Task<DietDto> GetAllDietMeals(int id)
         {
-            return await _dietRepository.GetAllDietMeals(id);
+            return await _dietRepository.GetAllDietMealsAsync(id);
         }
 
         public bool CheckIfUnique(string parameter, DietDto entityDto)
